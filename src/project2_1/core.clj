@@ -31,8 +31,8 @@
 
   (if (some seq? input)
     (map #(nand-simplify %) (filter seq? input))
-    (do (concat replacements {input (nand input)}))
-    (deep-substitute input replacements))
+    (do (merge replacements {input (nand input)})))
+    (deep-substitute input replacements)
 
   (nand input)
   )
