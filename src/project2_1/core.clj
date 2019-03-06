@@ -36,7 +36,5 @@
             )))
   )
 
-(def replacements {})
-
 
 (def test-list '(nand x y true (nand x true)))
