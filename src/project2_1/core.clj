@@ -18,22 +18,13 @@
   (or (= i true) (= i false))
   )
 
-;(defn nand [i]
-;  (cond
-;    (some false? i) '(true)
-;    (every? true? (rest i)) '(false)
-;    :else (if (not(every? boolean? (rest i)))
-;            (do (remove true? i));True if not all booleans
-;            ())))
-
 (defn nand [& args]
-  (if ()
     (cond
     (some false? args) true
     (every? true? args) false
     :else (if (not(every? boolean? args))
             (concat '(nand) (remove true? args))
-            )))
+            ))
   )
 
 
