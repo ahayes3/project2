@@ -27,12 +27,14 @@
 ;            ())))
 
 (defn nand [& args]
-  (cond
+  (if ()
+    (cond
     (some false? args) true
     (every? true? args) false
     :else (if (not(every? boolean? args))
             (concat '(nand) (remove true? args))
             )))
+  )
 
 (def replacements {})
 
