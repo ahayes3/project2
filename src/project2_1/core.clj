@@ -36,13 +36,5 @@
 
 (def replacements {})
 
-(defn nand-simplify [input]
-
-  (if (some seq? input)
-    (map #(nand-simplify %) (filter seq? input))
-    (do (merge replacements {input (nand input)})))()
-    (deep-substitute input replacements)
-
-  (nand input))
 
 (def test-list '(nand x y true (nand x true)))
