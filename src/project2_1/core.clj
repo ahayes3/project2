@@ -18,14 +18,31 @@
   (or (= i true) (= i false))
   )
 
-(defn nand [& args]
-    (cond
-    (some false? args) true
-    (every? true? args) false
-    :else (if (not(every? boolean? args))
-            (concat '(nand) (remove true? args))
-            ))
-  )
 
+;(defn nand [& args]
+;  (let [a (dedupe args)]
+;    (cond
+;    (some false? a) true
+;    (every? true? a) false
+;    :else (do (if (not(every? boolean? a))
+;            (concat '(nand) (remove true? a))))
+;    )
+;    )
+;  )
 
-(def test-list '(nand x y true (nand x true)))
+(defn nand-simplify [input]
+  (let [a (dedupe input)]
+    (if (or (not (= (some seq? a) nil)) (not (= (some seq? a) false)))
+      (map #((replace {% (nand-simplify %)} a)) (filter seq? a))
+      (cond
+        (some false? a) true
+        (every? true? (rest a)) false
+        :else (do
+                (remove true? a)
+
+                ))
+        )
+      )
+    )
+
+(def test-list '(nand 'x 'y true (nand 'x true)))
