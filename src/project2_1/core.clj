@@ -45,4 +45,4 @@
       )
     )
 
-(def test-list '(nand 'x 'y true (nand 'x true)))
+(def test-list '(nand x y true (nand x true)))
