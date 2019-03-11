@@ -33,11 +33,25 @@
   )))
 
 (defn nand-simplify [input]
-  (let [a (dedupe input)]
-    (if (some seq? a)
-      (nand-eval (substitute a (build-substitutions (filter seq? a))))
-      (nand-eval a)
-      )
-    )
-  )
+	(let [a (dedupe input)]
+		(if (some seq? a)
+			(if (and (and (= (count (nand-eval (substitute a (build-substitutions (filter seq? a))))) 2)
+										(seq? (second (nand-eval (substitute a (build-substitutions (filter seq? a))))))) ;THIS IS LOOKS AWFUL
+							 (= (count (second (nand-eval (substitute a (build-substitutions (filter seq? a)))))) 2)) ;IT WORKS SO IM KEEPING IT
+							 (second (second (nand-eval (substitute a (build-substitutions (filter seq? a))))))
+							 (do (if (and (= (count (nand-eval (substitute a (build-substitutions (filter seq? a))))) 3) ;IM SORRY
+														(= (count (nth (nand-eval (substitute a (build-substitutions (filter seq? a)))) 2)) 2))
+										 (do (if (= (second (nand-eval (substitute a (build-substitutions (filter seq? a)))))
+																(nth (nand-eval (substitute a (build-substitutions (filter seq? a)))) 1))
+													 true
+													 (nand-eval (substitute a (build-substitutions (filter seq? a))))
+													 ))
+										 (nand-eval (substitute a (build-substitutions (filter seq? a))))
+										 )))
+
+				;(nand-eval (substitute a (build-substitutions (filter seq? a)))))
+				(nand-eval a))
+
+			)
+		)
 
