@@ -18,13 +18,26 @@
   (or (= i true) (= i false))
   )
 
+(defn nand-eval [i]
+  (cond
+    (some false? i) true
+    (every? true? (rest i)) false
+    :else (remove true? i)
+    )
+  )
+
+(declare nand-simplify)
+(defn build-substitutions [i]
+  (let [substitutions {}] (let [l1 ()]
+														(apply hash-map (apply concat (map #(first (concat substitutions {% (nand-simplify %)})) i)))
+  )))
 
 (defn nand-simplify [input]
   (let [a (dedupe input)]
     (if (some seq? a)
-
+      (nand-eval (substitute a (build-substitutions (filter seq? a))))
+      (nand-eval a)
       )
-
     )
   )
 
