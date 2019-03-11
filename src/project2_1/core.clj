@@ -55,3 +55,16 @@
 			)
 		)
 
+
+(defn not-nand [input]
+	(deep-substitute input {'not 'nand})
+	)
+(defn or-nand [input]
+
+	)
+(defn and-nand [input]
+
+	)
+(defn eval-exp [input]
+	(not-nand input)
+	)
