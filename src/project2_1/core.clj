@@ -60,11 +60,25 @@
 	(deep-substitute input {'not 'nand})
 	)
 (defn or-nand [input]
+	(if (= (first input) 'or)
+		(do (if (some seq? input)
+					(or-nand (filter seq? input))
+					(map #(if (= % 'nand)
+									'nand
+									(list 'nand %))
+							 (substitute input {'or 'nand}))
 
+					))
+		input
+		)
 	)
 (defn and-nand [input]
 
 	)
 (defn eval-exp [input]
-	(not-nand input)
+	(or-nand (not-nand input))
 	)
+
+(def p1 '(and x (or x (and y (not z)))))
+(def p2 '(and (and z false) (or x true false)))
+(def p3 '(or true a))
