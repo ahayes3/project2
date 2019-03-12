@@ -36,10 +36,10 @@
 	(let [a (dedupe input)]
 		(if (some seq? a)
 			(if (and (and (= (count (nand-eval (substitute a (build-substitutions (filter seq? a))))) 2)
-										(seq? (second (nand-eval (substitute a (build-substitutions (filter seq? a))))))) ;THIS IS LOOKS AWFUL
-							 (= (count (second (nand-eval (substitute a (build-substitutions (filter seq? a)))))) 2)) ;IT WORKS SO IM KEEPING IT
+										(seq? (second (nand-eval (substitute a (build-substitutions (filter seq? a)))))))
+							 (= (count (second (nand-eval (substitute a (build-substitutions (filter seq? a)))))) 2))
 							 (second (second (nand-eval (substitute a (build-substitutions (filter seq? a))))))
-							 (do (if (and (= (count (nand-eval (substitute a (build-substitutions (filter seq? a))))) 3) ;IM SORRY
+							 (do (if (and (= (count (nand-eval (substitute a (build-substitutions (filter seq? a))))) 3)
 														(= (count (nth (nand-eval (substitute a (build-substitutions (filter seq? a)))) 2)) 2))
 										 (do (if (= (second (nand-eval (substitute a (build-substitutions (filter seq? a)))))
 																(nth (nand-eval (substitute a (build-substitutions (filter seq? a)))) 1))
@@ -61,20 +61,28 @@
 	)
 (defn or-nand [input]
 
-	(cond
-		(some seq? input) (map #(or-nand %) (filter seq? input))
-		(= (first input) 'or) (substitute (map #(if (= % 'or) 'nand (list 'nand %))  input ) {'or 'nand}))
+	(substitute (map (fn [i]
+				 (if (seq? i)
+					 (or-nand i)
+					 (if (= i 'or)
+						 'or
+						 (list 'nand i))
+					 )
+
+				 ) input) {'or 'nand})
 
 
 
 		)
 
 (defn and-nand [input]
-	(if (some seq? input)
-		(map #(and-nand %)(filter seq? input))
-		(list 'nand (substitute input {'and 'nand}))
-		)
-	)
+	(list 'nand (substitute (map (fn [i]
+				 (if (seq? i)
+					 (and-nand i)
+					 i
+					 )
+				 )input) {'and 'nand}
+	)))
 (defn simplify-exp [input]
 	(and-nand(not-nand (or-nand input)))
 	)
