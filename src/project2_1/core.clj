@@ -34,26 +34,25 @@
 
 (defn nand-simplify [input]
 	(let [a (dedupe input)]
-		(if (some seq? a)
-			(if (and (and (= (count (nand-eval (substitute a (build-substitutions (filter seq? a))))) 2)
-										(seq? (second (nand-eval (substitute a (build-substitutions (filter seq? a)))))))
-							 (= (count (second (nand-eval (substitute a (build-substitutions (filter seq? a)))))) 2))
-							 (second (second (nand-eval (substitute a (build-substitutions (filter seq? a))))))
-							 (do (if (and (= (count (nand-eval (substitute a (build-substitutions (filter seq? a))))) 3)
-														(= (count (nth (nand-eval (substitute a (build-substitutions (filter seq? a)))) 2)) 2))
-										 (do (if (= (second (nand-eval (substitute a (build-substitutions (filter seq? a)))))
-																(nth (nand-eval (substitute a (build-substitutions (filter seq? a)))) 1))
-													 true
-													 (nand-eval (substitute a (build-substitutions (filter seq? a))))
-													 ))
-										 (nand-eval (substitute a (build-substitutions (filter seq? a))))
-										 )))
-
-				;(nand-eval (substitute a (build-substitutions (filter seq? a)))))
-				(nand-eval a))
-
+		(if (some false?
+											(map (fn [i]
+														 (if (seq? i)
+															 (nand-simplify i)
+															 i)) a))
+			true
+			(if (every? true? (rest (map (fn [i]
+										 (if (seq? i)
+											 (nand-simplify i)
+											 i)) a)))
+				false
+				(remove true? (map (fn [i]
+							 (if (seq? i)
+								 (nand-simplify i)
+								 i)) a))
+				)
 			)
 		)
+	)
 
 
 (defn not-nand [input]
@@ -70,9 +69,6 @@
 					 )
 
 				 ) input) {'or 'nand})
-
-
-
 		)
 
 (defn and-nand [input]
