@@ -18,19 +18,11 @@
   (or (= i true) (= i false))
   )
 
-(defn nand-eval [i]
-  (cond
-    (some false? i) true
-    (every? true? (rest i)) false
-    :else (remove true? i)
-    )
-  )
+(defn special-cases [l]
+;	(if (and (some seq? l) (=(count l) 2))
 
-(declare nand-simplify)
-(defn build-substitutions [i]
-  (let [substitutions {}] (let [l1 ()]
-														(apply hash-map (apply concat (map #(first (concat substitutions {% (nand-simplify %)})) i)))
-  )))
+;	)
+	)
 
 (defn nand-simplify [input]
 	(let [a (dedupe input)]
@@ -48,16 +40,11 @@
 				(remove true? (map (fn [i]
 							 (if (seq? i)
 								 (nand-simplify i)
-								 i)) a))
-				)
-			)
-		)
-	)
-
+								 i)) a))))))
 
 (defn not-nand [input]
-	(deep-substitute input {'not 'nand})
-	)
+	(deep-substitute input {'not 'nand}))
+
 (defn or-nand [input]
 
 	(substitute (map (fn [i]
@@ -68,8 +55,7 @@
 						 (list 'nand i))
 					 )
 
-				 ) input) {'or 'nand})
-		)
+				 ) input) {'or 'nand}))
 
 (defn and-nand [input]
 	(list 'nand (substitute (map (fn [i]
@@ -77,8 +63,8 @@
 					 (and-nand i)
 					 i
 					 )
-				 )input) {'and 'nand}
-	)))
+				 )input) {'and 'nand})))
+
 (defn simplify-exp [input]
 	(and-nand(not-nand (or-nand input)))
 	)
